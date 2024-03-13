@@ -48,10 +48,9 @@ func (service *VideoFeedList) GetVideoFeedList() serializer.Response {
 	var Videos []model.Video
 	var count int64
 	fmt.Println(service.AuthorId, service.PageSize, service.PageNum) //Todo 用于检测哪里出现错误
-	//ToDo :在分页操作中遇到了第二页无法查询的问题
-
-	if err := model.DB.Model(&model.Video{}).Preload("Author").Where("author_id=?", service.AuthorId).
-		Limit(service.PageSize).Offset((service.PageNum - 1) * service.PageSize).Count(&count).
+	//ToDo :在分页操作中遇到了第二页无法查询的问题 修正:count语句查询不能再分页查询limit和offset之后
+	if err := model.DB.Model(&model.Video{}).Preload("Author").Where("author_id=?", service.AuthorId).Count(&count).
+		Limit(service.PageSize).Offset((service.PageNum - 1) * service.PageSize).
 		Find(&Videos).Error; err != nil {
 		logging.Error(err)
 		return serializer.Response{

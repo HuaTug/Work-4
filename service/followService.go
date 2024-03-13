@@ -60,7 +60,7 @@ func (service *FollowService) Following(uid uint) serializer.Response {
 func (service *FollowServicePage) List(uid uint) serializer.Response {
 	var list []model.Relation
 	var count uint
-	if err := model.DB.Model(&model.Relation{}).Preload("User").Where("follower_id=?", uid).Limit(service.PageSize).Offset((service.PageNum - 1) * service.PageSize).Count(&count).Find(&list).Error; err != nil {
+	if err := model.DB.Model(&model.Relation{}).Preload("User").Where("follower_id=?", uid).Count(&count).Limit(service.PageSize).Offset((service.PageNum - 1) * service.PageSize).Find(&list).Error; err != nil {
 		fmt.Println("分页查询出错")
 		return serializer.Response{
 			Status: 500,
@@ -73,7 +73,7 @@ func (service *FollowServicePage) List(uid uint) serializer.Response {
 func (service *FollowServicePage) List2(uid uint) serializer.Response {
 	var list []model.Relation
 	var count uint
-	if err := model.DB.Model(&model.Relation{}).Preload("User").Where("follow_id=?", uid).Limit(service.PageSize).Offset((service.PageNum - 1) * service.PageSize).Count(&count).Find(&list).Error; err != nil {
+	if err := model.DB.Model(&model.Relation{}).Preload("User").Where("follow_id=?", uid).Count(&count).Limit(service.PageSize).Offset((service.PageNum - 1) * service.PageSize).Find(&list).Error; err != nil {
 		fmt.Println("分页查询出错")
 		return serializer.Response{
 			Status: 500,

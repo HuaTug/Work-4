@@ -10,6 +10,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"gopkg.in/ini.v1"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -45,6 +46,8 @@ var (
 func Init() {
 	file, err := ini.Load("./configs/conf.ini")
 	if err != nil {
+		executablePath, _ := os.Executable()
+		fmt.Println("这是路径" + executablePath)
 		panic(err)
 	}
 	LoadMysqlData(file)
@@ -53,7 +56,7 @@ func Init() {
 	LoadMongoDB(file)
 	path := strings.Join([]string{DbUser, ":", DbPassword, "@tcp(", DbHost, ":", DbPort, ")/", DbName, "?charset=utf8&parseTime=true"}, "")
 	model.Database(path)
-	Redis()
+	//Redis()
 	MongoDB()
 }
 func LoadMysqlData(file *ini.File) {
